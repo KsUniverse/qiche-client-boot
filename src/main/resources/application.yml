@@ -126,15 +126,6 @@ report:
     provider:
       prefix: blade-
 
-#oss默认配置
-oss:
-  enabled: true
-  name: qiniu
-  tenant-mode: true
-  endpoint: http://prt1thnw3.bkt.clouddn.com
-  access-key: N_Loh1ngBqcJovwiAJqR91Ifj2vgOWHOf8AwBA_h
-  secret-key: AuzuA1KHAbkIndCU0dB3Zfii2O3crHNODDmpxHRS
-  bucket-name: bladex
 
 #第三方登陆配置
 social:
@@ -232,7 +223,7 @@ blade:
   #多租户配置
   tenant:
     #多租户增强
-    enhance: true
+    enhance: false
     #多租户授权保护
     license: false
     #动态数据源功能

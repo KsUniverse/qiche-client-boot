@@ -13,9 +13,9 @@ spring:
     #  commandTimeout: 5000
   datasource:
     # MySql
-    url: jdbc:mysql://localhost:3306/bladex_boot?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://localhost:3306/qiche_client?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: 12345678
     # PostgreSQL
     #url: jdbc:postgresql://127.0.0.1:5432/bladex_boot
     #username: postgres
@@ -52,3 +52,13 @@ blade:
     upload-domain: http://localhost:8999
     remote-path: /usr/share/nginx/html
 
+
+#oss默认配置
+oss:
+  enabled: true
+  name: qiniu
+  tenant-mode: true
+  endpoint: http://prt1thnw3.bkt.clouddn.com
+  access-key: N_Loh1ngBqcJovwiAJqR91Ifj2vgOWHOf8AwBA_h
+  secret-key: AuzuA1KHAbkIndCU0dB3Zfii2O3crHNODDmpxHRS
+  bucket-name: bladex
