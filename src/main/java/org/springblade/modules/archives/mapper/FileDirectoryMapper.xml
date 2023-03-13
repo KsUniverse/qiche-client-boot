@@ -3,7 +3,7 @@
 <mapper namespace="org.springblade.modules.archives.mapper.FileDirectoryMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="fileDirectoryResultMap" type="org.springblade.modules.archives.entity.FileDirectoryEntity">
+    <resultMap id="fileDirectoryResultMap" type="org.springblade.modules.archives.vo.FileDirectoryVO">
         <result column="id" property="id"/>
         <result column="type" property="type"/>
         <result column="name" property="name"/>
@@ -20,6 +20,25 @@
 
     <select id="selectFileDirectoryPage" resultMap="fileDirectoryResultMap">
         select * from xy_file_directory where is_deleted = 0
+    </select>
+    <select id="directory" resultMap="fileDirectoryResultMap">
+
+        select fd.* from xy_file_directory fd left join xy_file f on f.type = #{fileDirectoryVO.type} and fd.id =
+        f.directory_id
+        where f.is_deleted = 0 and fd.is_deleted = 0
+        <if test="fileDirectoryVO.name != null and fileDirectoryVO.name != ''">
+
+            and (fd.name like concat(#{fileDirectoryVO.name}, '%') or f.name like concat(#{fileDirectoryVO.name}, '%') )
+        </if>
+        order by fd.name
+    </select>
+    <select id="directoryWithoutName" resultType="org.springblade.modules.archives.vo.FileDirectoryVO">
+
+        select *
+        from xy_file_directory
+        where is_deleted = 0
+          and type = #{fileDirectoryVO.type}
+        order by name
     </select>
 
 

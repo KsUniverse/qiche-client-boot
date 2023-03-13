@@ -16,6 +16,7 @@
  */
 package org.springblade.modules.archives.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springblade.modules.archives.entity.FileDirectoryEntity;
 import org.springblade.modules.archives.vo.FileDirectoryVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -38,6 +39,10 @@ public interface FileDirectoryMapper extends BaseMapper<FileDirectoryEntity> {
 	 * @return
 	 */
 	List<FileDirectoryVO> selectFileDirectoryPage(IPage page, FileDirectoryVO fileDirectory);
+
+
+    List<FileDirectoryVO> directory(@Param("fileDirectoryVO") FileDirectoryVO fileDirectoryVO);
+    List<FileDirectoryVO> directoryWithoutName(@Param("fileDirectoryVO") FileDirectoryVO fileDirectoryVO);
 
 
 }

@@ -32,4 +32,8 @@ import lombok.EqualsAndHashCode;
 public class FileDirectoryVO extends FileDirectoryEntity {
 	private static final long serialVersionUID = 1L;
 
+	private String mac;
+
+	private String code;
+
 }

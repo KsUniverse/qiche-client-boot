@@ -16,6 +16,8 @@
  */
 package org.springblade.modules.archives.service.impl;
 
+import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springblade.modules.archives.entity.FileDirectoryEntity;
 import org.springblade.modules.archives.vo.FileDirectoryVO;
 import org.springblade.modules.archives.mapper.FileDirectoryMapper;
@@ -23,6 +25,10 @@ import org.springblade.modules.archives.service.IFileDirectoryService;
 import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 文件目录 服务实现类
@@ -38,5 +44,15 @@ public class FileDirectoryServiceImpl extends BaseServiceImpl<FileDirectoryMappe
 		return page.setRecords(baseMapper.selectFileDirectoryPage(page, fileDirectory));
 	}
 
+	@Override
+	public R<List<FileDirectoryVO>> directory(FileDirectoryVO fileDirectoryVO) {
+		if (StringUtil.isBlank(fileDirectoryVO.getName())) {
+			return R.data(baseMapper.directoryWithoutName(fileDirectoryVO));
+		} else {
+			return R.data(
+				baseMapper.directory(fileDirectoryVO).stream().collect(Collectors.groupingBy(FileDirectoryVO::getId))
+					.values().stream().map(one -> one.get(0)).collect(Collectors.toList()));
 
+		}
+	}
 }

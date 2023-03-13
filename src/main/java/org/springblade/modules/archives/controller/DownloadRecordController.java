@@ -16,6 +16,7 @@
  */
 package org.springblade.modules.archives.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -28,6 +29,7 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.modules.archives.entity.DownloadRecordEntity;
@@ -67,7 +69,9 @@ public class DownloadRecordController extends BladeController {
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "分页", notes = "传入downloadRecord")
 	public R<IPage<DownloadRecordVO>> list(DownloadRecordEntity downloadRecord, Query query) {
-		IPage<DownloadRecordEntity> pages = downloadRecordService.page(Condition.getPage(query), Condition.getQueryWrapper(downloadRecord));
+		IPage<DownloadRecordEntity> pages = downloadRecordService.page(Condition.getPage(query), Wrappers.lambdaQuery(DownloadRecordEntity.class)
+			.like(StringUtil.isNotBlank(downloadRecord.getCode()), DownloadRecordEntity::getCode, downloadRecord.getCode())
+			.orderByDesc(DownloadRecordEntity::getCreateTime));
 		return R.data(DownloadRecordWrapper.build().pageVO(pages));
 	}
 

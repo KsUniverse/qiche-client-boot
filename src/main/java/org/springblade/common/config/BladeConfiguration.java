@@ -51,6 +51,9 @@ public class BladeConfiguration implements WebMvcConfigurer {
 		secureRegistry.excludePathPatterns("/webjars/**");
 		secureRegistry.excludePathPatterns("/swagger-resources/**");
 		secureRegistry.excludePathPatterns("/druid/**");
+		secureRegistry.excludePathPattern("/blade-client/activeCode/bind");
+		secureRegistry.excludePathPattern("/blade-client/activeCode/verify");
+		secureRegistry.excludePathPatterns("/blade-client/file/*");
 		return secureRegistry;
 	}
 

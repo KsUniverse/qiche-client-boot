@@ -16,11 +16,14 @@
  */
 package org.springblade.modules.archives.controller;
 
+import cn.hutool.core.lang.UUID;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import lombok.AllArgsConstructor;
+
 import javax.validation.Valid;
 
 import org.springblade.core.secure.BladeUser;
@@ -28,6 +31,7 @@ import org.springblade.core.mp.support.Condition;
 import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.modules.archives.entity.ActiveCodeEntity;
@@ -60,6 +64,7 @@ public class ActiveCodeController extends BladeController {
 		ActiveCodeEntity detail = activeCodeService.getOne(Condition.getQueryWrapper(activeCode));
 		return R.data(ActiveCodeWrapper.build().entityVO(detail));
 	}
+
 	/**
 	 * 激活码 分页
 	 */
@@ -67,7 +72,11 @@ public class ActiveCodeController extends BladeController {
 	@ApiOperationSupport(order = 2)
 	@ApiOperation(value = "分页", notes = "传入activeCode")
 	public R<IPage<ActiveCodeVO>> list(ActiveCodeEntity activeCode, Query query) {
-		IPage<ActiveCodeEntity> pages = activeCodeService.page(Condition.getPage(query), Condition.getQueryWrapper(activeCode));
+		IPage<ActiveCodeEntity> pages = activeCodeService.page(Condition.getPage(query),
+			Wrappers.lambdaQuery(ActiveCodeEntity.class).like(StringUtil.isNotBlank(activeCode.getCode()),
+					ActiveCodeEntity::getCode, activeCode.getCode())
+				.like(StringUtil.isNotBlank(activeCode.getPhone()), ActiveCodeEntity::getPhone, activeCode.getPhone())
+				.orderByDesc(ActiveCodeEntity::getUpdateTime));
 		return R.data(ActiveCodeWrapper.build().pageVO(pages));
 	}
 
@@ -123,4 +132,8 @@ public class ActiveCodeController extends BladeController {
 	}
 
 
+	@GetMapping("/generator")
+	public R generator() {
+		return R.data(UUID.fastUUID().toString());
+	}
 }

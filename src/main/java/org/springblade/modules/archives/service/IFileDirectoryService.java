@@ -16,10 +16,13 @@
  */
 package org.springblade.modules.archives.service;
 
+import org.springblade.core.tool.api.R;
 import org.springblade.modules.archives.entity.FileDirectoryEntity;
 import org.springblade.modules.archives.vo.FileDirectoryVO;
 import org.springblade.core.mp.base.BaseService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+
+import java.util.List;
 
 /**
  * 文件目录 服务类
@@ -39,4 +42,5 @@ public interface IFileDirectoryService extends BaseService<FileDirectoryEntity> 
 	IPage<FileDirectoryVO> selectFileDirectoryPage(IPage<FileDirectoryVO> page, FileDirectoryVO fileDirectory);
 
 
+    R<List<FileDirectoryVO>> directory(FileDirectoryVO fileDirectoryVO);
 }

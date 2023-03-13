@@ -39,4 +39,7 @@ public interface IActiveCodeService extends BaseService<ActiveCodeEntity> {
 	IPage<ActiveCodeVO> selectActiveCodePage(IPage<ActiveCodeVO> page, ActiveCodeVO activeCode);
 
 
+    boolean bind(String code, String mac);
+
+	boolean verify(ActiveCodeEntity activeCodeEntity, String code, String mac);
 }

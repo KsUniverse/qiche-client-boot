@@ -82,7 +82,7 @@ public class FileController extends BladeController {
         IPage<FileEntity> pages = fileService.page(Condition.getPage(query), Wrappers.lambdaQuery(FileEntity.class)
                 .like(StringUtil.isNotBlank(file.getName()), FileEntity::getName, file.getName())
                 .eq(FileEntity::getType, file.getType())
-                .orderByDesc(FileEntity::getCreateTime));
+                .orderByAsc(FileEntity::getName));
         return R.data(FileWrapper.build().pageVO(pages));
     }
 
