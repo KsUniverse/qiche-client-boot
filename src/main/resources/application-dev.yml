@@ -15,7 +15,7 @@ spring:
     # MySql
     url: jdbc:mysql://localhost:3306/qiche_client?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
     username: root
-    password: 123456
+    password: 12345678
     # PostgreSQL
     #url: jdbc:postgresql://127.0.0.1:5432/bladex_boot
     #username: postgres

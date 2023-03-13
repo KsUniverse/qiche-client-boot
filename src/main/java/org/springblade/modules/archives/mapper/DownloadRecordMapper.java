@@ -16,6 +16,7 @@
  */
 package org.springblade.modules.archives.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springblade.modules.archives.entity.DownloadRecordEntity;
 import org.springblade.modules.archives.vo.DownloadRecordVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -40,4 +41,5 @@ public interface DownloadRecordMapper extends BaseMapper<DownloadRecordEntity> {
 	List<DownloadRecordVO> selectDownloadRecordPage(IPage page, DownloadRecordVO downloadRecord);
 
 
+    Long limitEnable(@Param("time") long time, @Param("code") String code, @Param("fileId") Long fileId);
 }

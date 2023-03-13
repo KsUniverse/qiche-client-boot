@@ -64,13 +64,13 @@ public class ActiveCodeServiceImpl extends BaseServiceImpl<ActiveCodeMapper, Act
 			activeCodeEntity = baseMapper.selectOne(Wrappers.lambdaQuery(ActiveCodeEntity.class).eq(ActiveCodeEntity::getCode, code));
 		}
 		if (activeCodeEntity == null) {
-			throw new ServiceException("无效的激活码");
+			throw new ServiceException("无效的激活码, 请删除软件安装目录中的code.txt文件再重新激活");
 		}
 		if (activeCodeEntity.getEndTime().before(new Date())) {
-			throw new ServiceException("激活码已过期");
+			throw new ServiceException("激活码已过期, 请删除软件安装目录中的code.txt文件再重新激活");
 		}
 		if (StringUtil.isNotBlank(activeCodeEntity.getMac()) && !Objects.equals(mac, activeCodeEntity.getMac())) {
-			throw new ServiceException("激活码已被激活");
+			throw new ServiceException("激活码已被激活, 请删除软件安装目录中的code.txt文件再重新激活");
 		}
 		return true;
 	}

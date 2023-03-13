@@ -21,6 +21,15 @@
     <select id="selectDownloadRecordPage" resultMap="downloadRecordResultMap">
         select * from xy_download_record where is_deleted = 0
     </select>
+    <select id="limitEnable" resultType="java.lang.Long">
+
+        select count(distinct file_id)
+        from xy_download_record
+        where is_deleted = 0
+          and create_time > #{time}
+          and code = #{code}
+          and file_id != #{fileId}
+    </select>
 
 
 </mapper>

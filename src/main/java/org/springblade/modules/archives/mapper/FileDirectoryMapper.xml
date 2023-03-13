@@ -28,7 +28,7 @@
         where f.is_deleted = 0 and fd.is_deleted = 0
         <if test="fileDirectoryVO.name != null and fileDirectoryVO.name != ''">
 
-            and (fd.name like concat(#{fileDirectoryVO.name}, '%') or f.name like concat(#{fileDirectoryVO.name}, '%') )
+            and (fd.name like concat('%', #{fileDirectoryVO.name}, '%') or f.name like concat('%', #{fileDirectoryVO.name}, '%') )
         </if>
         order by fd.name
     </select>
