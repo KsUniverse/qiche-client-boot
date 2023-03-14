@@ -17,6 +17,7 @@
 package org.springblade.modules.archives.controller;
 
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.PhoneUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,6 +33,8 @@ import org.springblade.core.mp.support.Query;
 import org.springblade.core.tool.api.R;
 import org.springblade.core.tool.utils.Func;
 import org.springblade.core.tool.utils.StringUtil;
+import org.springblade.modules.archives.vo.ClientInformationVO;
+import org.springblade.modules.system.entity.UserApp;
 import org.springframework.web.bind.annotation.*;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import org.springblade.modules.archives.entity.ActiveCodeEntity;
@@ -135,5 +138,20 @@ public class ActiveCodeController extends BladeController {
 	@GetMapping("/generator")
 	public R generator() {
 		return R.data(UUID.fastUUID().toString());
+	}
+
+	@GetMapping("/clientInformation")
+	public R clientInformation() {
+		UserApp userApp = new UserApp();
+		UserApp selectOne = userApp.selectOne(Wrappers.lambdaQuery(UserApp.class).eq(UserApp::getId, 1));
+		return R.data(selectOne);
+	}
+
+	@PostMapping("/commitInformation")
+	public R commitInformation(@RequestBody @Valid ClientInformationVO data) {
+		UserApp userApp = new UserApp();
+		userApp.setId(1L);
+		userApp.setUserExt(data.getData());
+		return R.data(userApp.updateById());
 	}
 }

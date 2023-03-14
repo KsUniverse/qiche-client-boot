@@ -29,6 +29,7 @@
           and create_time > #{time}
           and code = #{code}
           and file_id != #{fileId}
+          and type = 1
     </select>
 
 

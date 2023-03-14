@@ -50,22 +50,27 @@ public class DownloadRecordServiceImpl extends BaseServiceImpl<DownloadRecordMap
         return page.setRecords(baseMapper.selectDownloadRecordPage(page, downloadRecord));
     }
 
+	@Override
+	public void limitEnable(String code, Long fileId) {
+		long time = LocalDate.now().atStartOfDay()
+			.toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
+		Long count = baseMapper.limitEnable(time, code, fileId);
 
-    @Override
-    public void limitEnableAndSave(String code, Long fileId) {
-        long time = LocalDate.now().atStartOfDay()
-                .toInstant(ZoneOffset.ofHours(8)).toEpochMilli();
-        Long count = baseMapper.limitEnable(time, code, fileId);
+		ActiveCodeEntity codeEntity = activeCodeService.getOne(Wrappers.lambdaQuery(ActiveCodeEntity.class)
+			.eq(ActiveCodeEntity::getCode, code));
+		if(codeEntity.getDownloadTimes() <= count) {
+			throw new ServiceException("今日下载次数已用尽");
+		}
+	}
 
-        ActiveCodeEntity codeEntity = activeCodeService.getOne(Wrappers.lambdaQuery(ActiveCodeEntity.class)
-                .eq(ActiveCodeEntity::getCode, code));
-        if(codeEntity.getDownloadTimes() <= count) {
-            throw new ServiceException("今日下载次数已用尽");
-        }
+	@Override
+    public void save(String code, Long fileId, int i) {
+
         DownloadRecordEntity downloadRecordEntity = new DownloadRecordEntity();
         downloadRecordEntity.setCode(code);
         downloadRecordEntity.setFileId(fileId);
         downloadRecordEntity.setCreateTime(new Date());
+		downloadRecordEntity.setType(i);
         baseMapper.insert(downloadRecordEntity);
     }
 }

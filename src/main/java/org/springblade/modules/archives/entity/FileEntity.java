@@ -63,4 +63,7 @@ public class FileEntity extends TenantEntity {
 	@ApiModelProperty(value = "是否支持预览")
 	private Boolean preview;
 
+	@ApiModelProperty(value = "能否下载")
+	private Boolean canDownload;
+
 }

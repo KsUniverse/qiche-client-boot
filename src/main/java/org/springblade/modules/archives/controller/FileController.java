@@ -82,6 +82,7 @@ public class FileController extends BladeController {
         IPage<FileEntity> pages = fileService.page(Condition.getPage(query), Wrappers.lambdaQuery(FileEntity.class)
                 .like(StringUtil.isNotBlank(file.getName()), FileEntity::getName, file.getName())
                 .eq(FileEntity::getType, file.getType())
+				.eq(file.getDirectoryId() != null, FileEntity::getDirectoryId, file.getDirectoryId())
                 .orderByAsc(FileEntity::getName));
         return R.data(FileWrapper.build().pageVO(pages));
     }
@@ -148,6 +149,11 @@ public class FileController extends BladeController {
         entity.setDirectoryId(directoryId);
         entity.setPreview(false);
         entity.setType(type);
+		if(type == 1 || type == 6) {
+			entity.setCanDownload(false);
+		} else {
+			entity.setCanDownload(true);
+		}
         entity.setUrl(bladeFile.getLink().replace("shanghai-internal", "shanghai"));
         fileService.save(entity);
         return R.data(bladeFile);

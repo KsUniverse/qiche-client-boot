@@ -47,4 +47,6 @@ public class DownloadRecordEntity extends TenantEntity {
 	@ApiModelProperty(value = "文件id")
 	private Long fileId;
 
+	private Integer type;
+
 }

@@ -122,7 +122,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
 	@Override
 	public boolean updateUserInfo(User user) {
-		user.setPassword(null);
+		if (Func.isNotEmpty(user.getPassword())) {
+			user.setPassword(DigestUtil.encrypt(user.getPassword()));
+		} else {
+			user.setPassword(null);
+		}
 		return updateById(user);
 	}
 

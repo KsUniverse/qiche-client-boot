@@ -38,6 +38,7 @@ public interface IDownloadRecordService extends BaseService<DownloadRecordEntity
 	 */
 	IPage<DownloadRecordVO> selectDownloadRecordPage(IPage<DownloadRecordVO> page, DownloadRecordVO downloadRecord);
 
+	void limitEnable(String code, Long fileId);
 
-    void limitEnableAndSave(String code, Long fileId);
+    void save(String code, Long fileId, int type);
 }
