@@ -5,7 +5,10 @@ import cn.hutool.core.img.ImgUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.tool.api.R;
+import org.springblade.core.tool.utils.CollectionUtil;
+import org.springblade.core.tool.utils.StringUtil;
 import org.springblade.modules.archives.entity.ActiveCodeEntity;
+import org.springblade.modules.archives.entity.FileDirectoryEntity;
 import org.springblade.modules.archives.entity.FileEntity;
 import org.springblade.modules.archives.service.IActiveCodeService;
 import org.springblade.modules.archives.service.IDownloadRecordService;
@@ -18,7 +21,11 @@ import org.springblade.modules.archives.vo.FileVO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController("clientFileController")
 @RequestMapping("/blade-client/file")
@@ -46,16 +53,34 @@ public class FileController {
 	@PostMapping("/files")
 	public R<List<FileClientVO>> files(@RequestBody FileVO fileVO) {
 		activeCodeService.verify(null, fileVO.getCode(), fileVO.getMac());
-		List<FileEntity> entities = fileService.list(Wrappers.lambdaQuery(FileEntity.class)
-			.eq(FileEntity::getType, fileVO.getType())
-			.eq(FileEntity::getDirectoryId, fileVO.getDirectoryId())
-			.like(FileEntity::getName, fileVO.getName()));
-		entities.forEach(one -> {
-			if(one.getType() != 6) {
-				one.setUrl(null);
+		List<FileDirectoryEntity> directoryEntities = fileDirectoryService.list(Wrappers.lambdaQuery(FileDirectoryEntity.class)
+			.eq(FileDirectoryEntity::getType, fileVO.getType())
+			.like(StringUtil.isNotBlank(fileVO.getName()), FileDirectoryEntity::getName, fileVO.getName())
+			.orderByAsc(FileDirectoryEntity::getName));
+		List<FileClientVO> fileClientVOS = BeanUtil.copyToList(directoryEntities, FileClientVO.class);
+		Map<Long, FileClientVO> longList = fileClientVOS.stream().collect(Collectors.toMap(FileClientVO::getId, x -> x, (k1, k2) -> k1));
+		List<FileVO> entities = fileService.files(fileVO);
+		entities.forEach(o -> {
+			if (o.getType() != 6) {
+				o.setUrl(null);
 			}
 		});
-		return R.data(BeanUtil.copyToList(entities, FileClientVO.class));
+		Map<Long, List<FileVO>> collect = entities.stream().filter(one -> StringUtil.isNotBlank(one.getDirectoryName()))
+			.collect(Collectors.groupingBy(FileVO::getDirectoryId));
+		collect.forEach((key, value) -> {
+			FileClientVO fileClientVO = longList.get(key);
+			if(fileClientVO != null) {
+				fileClientVO.setFiles(BeanUtil.copyToList(value, FileClientVO.class));
+			} else {
+				fileClientVO = new FileClientVO();
+				fileClientVO.setName(value.get(0).getDirectoryName());
+				fileClientVO.setId(value.get(0).getDirectoryId());
+				fileClientVO.setFiles(BeanUtil.copyToList(value, FileClientVO.class));
+				longList.put(key, fileClientVO);
+			}
+		});
+		List<FileClientVO> collect1 = longList.values().stream().sorted(Comparator.comparing(FileClientVO::getName)).collect(Collectors.toList());
+		return R.data(collect1);
 	}
 
 	@PostMapping("/download")
@@ -86,4 +111,5 @@ public class FileController {
 		downloadRecordService.save(downloadVO.getCode(), downloadVO.getFileId(), 2);
 		return R.data(fileEntity.getUrl());
 	}
+
 }

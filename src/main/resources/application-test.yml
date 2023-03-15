@@ -4,7 +4,7 @@ spring:
     ##redis 单机环境配置
     ##将docker脚本部署的redis服务映射为宿主机ip
     ##生产环境推荐使用阿里云高可用redis服务并设置密码
-    host: 127.0.0.1
+    host: 118.31.61.71
     port: 6379
     password:
     database: 0
@@ -14,9 +14,9 @@ spring:
     #  nodes: 127.0.0.1:7001,127.0.0.1:7002,127.0.0.1:7003
     #  commandTimeout: 5000
   datasource:
-    url: jdbc:mysql://localhost:3306/bladex_boot?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://118.31.61.71:3306/qiche_client?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true
     username: root
-    password: root
+    password: qwer!@#$1234
 
 #第三方登陆
 social:
@@ -31,10 +31,18 @@ blade:
     enabled: false
     ##将docker脚本部署的redis服务映射为宿主机ip
     ##生产环境推荐使用阿里云高可用redis服务并设置密码
-    address: redis://127.0.0.1:6379
+    address: redis://118.31.61.71:6379
     password: 123456
   #本地文件上传
   file:
     remote-mode: true
     upload-domain: http://localhost:8999
     remote-path: /usr/share/nginx/html
+oss:
+  enabled: true
+  name: ali
+  tenant-mode: false
+  endpoint: https://oss-cn-hangzhou-internal.aliyuncs.com/
+  access-key: LTAI5tLooDJgzTg3TTL9uaSc
+  secret-key: irkRkH0QDQg0H5LUAuiKI1X8c8Rrx1
+  bucket-name: qiche-client

@@ -16,6 +16,7 @@
  */
 package org.springblade.modules.archives.mapper;
 
+import org.apache.ibatis.annotations.Param;
 import org.springblade.modules.archives.entity.FileEntity;
 import org.springblade.modules.archives.vo.FileVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -40,4 +41,5 @@ public interface FileMapper extends BaseMapper<FileEntity> {
 	List<FileVO> selectFilePage(IPage page, FileVO file);
 
 
+    List<FileVO> files(@Param("fileVO") FileVO fileVO);
 }

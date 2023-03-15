@@ -21,6 +21,8 @@ import org.springblade.core.tool.node.INode;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 /**
  * 文件目录 视图实体类
  *
@@ -35,5 +37,9 @@ public class FileVO extends FileEntity {
 	private String mac;
 
 	private String code;
+
+	private String directoryName;
+
+	private List<Long> directoryIdList;
 
 }

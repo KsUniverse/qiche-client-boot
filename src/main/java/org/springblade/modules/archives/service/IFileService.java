@@ -21,6 +21,8 @@ import org.springblade.modules.archives.vo.FileVO;
 import org.springblade.core.mp.base.BaseService;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+
 /**
  * 文件目录 服务类
  *
@@ -39,4 +41,5 @@ public interface IFileService extends BaseService<FileEntity> {
 	IPage<FileVO> selectFilePage(IPage<FileVO> page, FileVO file);
 
 
+    List<FileVO> files(FileVO fileVO);
 }

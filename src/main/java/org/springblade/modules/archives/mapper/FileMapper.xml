@@ -3,11 +3,12 @@
 <mapper namespace="org.springblade.modules.archives.mapper.FileMapper">
 
     <!-- 通用查询映射结果 -->
-    <resultMap id="fileResultMap" type="org.springblade.modules.archives.entity.FileEntity">
+    <resultMap id="fileResultMap" type="org.springblade.modules.archives.vo.FileVO">
         <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="type" property="type"/>
         <result column="directory_id" property="directoryId"/>
+        <result column="directory_name" property="directoryName"/>
         <result column="url" property="url"/>
         <result column="preview" property="preview"/>
         <result column="tenant_id" property="tenantId"/>
@@ -23,6 +24,17 @@
 
     <select id="selectFilePage" resultMap="fileResultMap">
         select * from xy_file where is_deleted = 0
+    </select>
+    <select id="files" resultType="org.springblade.modules.archives.vo.FileVO">
+        select f.*, fd.name as directory_name from xy_file f left join xy_file_directory fd on f.directory_id = fd.id
+        and fd.is_deleted = 0
+        where f.type = #{fileVO.type}
+        <if test="fileVO.name != null and fileVO.name != ''">
+            and f.name like concat('%',
+            #{fileVO.name}, '%')
+        </if>
+        and f.is_deleted = 0
+        order by f.name asc
     </select>
 
 

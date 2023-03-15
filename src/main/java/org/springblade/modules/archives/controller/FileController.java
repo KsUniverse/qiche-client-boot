@@ -154,7 +154,7 @@ public class FileController extends BladeController {
 		} else {
 			entity.setCanDownload(true);
 		}
-        entity.setUrl(bladeFile.getLink().replace("shanghai-internal", "shanghai"));
+        entity.setUrl(bladeFile.getLink().replace("hangzhou-internal", "hangzhou"));
         fileService.save(entity);
         return R.data(bladeFile);
     }

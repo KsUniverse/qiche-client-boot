@@ -24,6 +24,8 @@ import org.springblade.core.mp.base.BaseServiceImpl;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 
+import java.util.List;
+
 /**
  * 文件目录 服务实现类
  *
@@ -38,5 +40,8 @@ public class FileServiceImpl extends BaseServiceImpl<FileMapper, FileEntity> imp
 		return page.setRecords(baseMapper.selectFilePage(page, file));
 	}
 
-
+	@Override
+	public List<FileVO> files(FileVO fileVO) {
+		return baseMapper.files(fileVO);
+	}
 }
