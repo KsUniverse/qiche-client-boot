@@ -17,6 +17,8 @@
 package org.springblade.modules.archives.controller;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,7 @@ import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import javax.validation.Valid;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springblade.core.log.exception.ServiceException;
 import org.springblade.core.oss.model.BladeFile;
 import org.springblade.core.secure.BladeUser;
@@ -51,6 +54,8 @@ import org.springframework.web.multipart.MultipartFile;
  * @author BladeX
  * @since 2023-03-11
  */
+
+@Slf4j
 @RestController
 @AllArgsConstructor
 @RequestMapping("blade-file/file")
@@ -143,20 +148,17 @@ public class FileController extends BladeController {
     @PostMapping("/put-file")
     public R<BladeFile> putFile(@RequestParam MultipartFile file, @RequestParam Integer type,
             @RequestParam Long directoryId) {
+		log.info("文件上传进来的时间: {}", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         BladeFile bladeFile = ossBuilder.template().putFile(file.getOriginalFilename(), file.getInputStream());
+		log.info("文件上传结束的时间: {}", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         FileEntity entity = new FileEntity();
         entity.setName(file.getOriginalFilename());
         entity.setDirectoryId(directoryId);
         entity.setPreview(false);
         entity.setType(type);
-		if(type == 1 || type == 6) {
-			entity.setCanDownload(false);
-		} else {
-			entity.setCanDownload(true);
-		}
+		entity.setCanDownload(type != 1 && type != 6);
         entity.setUrl(bladeFile.getLink().replace("hangzhou-internal", "hangzhou"));
         fileService.save(entity);
         return R.data(bladeFile);
     }
-
 }
